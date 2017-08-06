@@ -10,7 +10,9 @@ var walkSync = function(dir, filelist) {
             filelist = walkSync(dir + file + '/', filelist);
         }
         else {
-            filelist.push({name: file, fullPath: dir + file});
+            if(!file.startsWith('.')) {
+                filelist.push({name: file, fullPath: dir + file});
+            }
         }
     });
     return filelist;
