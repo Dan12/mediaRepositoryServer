@@ -3,12 +3,14 @@ var app = express();
 var fileService = require("./file-service")
 var ipHelper = require("./ip-helper")
 
+var filePath = process.env.MEDIA_PATH;
+
 app.use(function (req, res, next) {
   console.log('Get request for ' + req.originalUrl + ' from ' + req.connection.remoteAddress);
   next()
 })
 
-app.use('/static', express.static('../mediaFiles'))
+app.use('/static', express.static(filePath))
 
 app.get('/', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
@@ -17,9 +19,8 @@ app.get('/', function (req, res) {
 
 app.get('/file_names', function (req, res) {
     res.setHeader('Content-Type', 'application/json');
-    fileService.getFileNames(function(fileNames) {
-      res.send(JSON.stringify({data: fileNames}));  
-    })
+    var fileNames = fileService.getFileNames(filePath);
+    res.send(JSON.stringify({data: fileNames}));
 })
 
 var server = app.listen(8080, function () {
